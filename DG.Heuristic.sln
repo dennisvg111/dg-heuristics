@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DG.Heuristic.Tests", "tests\DG.Heuristic.Tests.csproj", "{3F2AAD37-DD33-4C84-9CA4-92A12D829468}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DG.Heuristic", "src\DG.Heuristic.csproj", "{22629084-5748-4EC1-BE95-5F57033FED59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DG.Heuristic", "src\DG.Heuristic.csproj", "{22629084-5748-4EC1-BE95-5F57033FED59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DG.Heuristic.Examples", "examples\DG.Heuristic.Examples.csproj", "{90549F90-AFB9-411D-B330-1398F338EDDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{22629084-5748-4EC1-BE95-5F57033FED59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22629084-5748-4EC1-BE95-5F57033FED59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22629084-5748-4EC1-BE95-5F57033FED59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90549F90-AFB9-411D-B330-1398F338EDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90549F90-AFB9-411D-B330-1398F338EDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90549F90-AFB9-411D-B330-1398F338EDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90549F90-AFB9-411D-B330-1398F338EDDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DG.Heuristic
+namespace DG.Heuristic.Collections
 {
-    public class Class1
+    internal class Knapsack
     {
     }
 }
