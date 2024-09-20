@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ProjectGuid>22629084-5748-4ec1-be95-5f57033fed59</ProjectGuid>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyTitle>DG.Heuristic</AssemblyTitle>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <Product>DG.Heuristic</Product>
+    <Copyright>Copyright ©  2024</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>DG.Heuristic</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/dennisvg111/heuristics</RepositoryUrl>
+    <Deterministic>false</Deterministic>
+    <PackageId>Dennisvg.$(AssemblyName)</PackageId>
+    <Company>$(AssemblyName)</Company>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Authors>dennisvg111</Authors>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>utilities</PackageTags>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <Version>$(AssemblyVersion)</Version>
+    <Description>Utilities for problems involving such as combinatorial optimization or cluster analysis</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+</Project>

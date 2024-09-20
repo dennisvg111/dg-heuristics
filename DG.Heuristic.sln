@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DG.Heuristic.Tests", "tests\DG.Heuristic.Tests.csproj", "{3F2AAD37-DD33-4C84-9CA4-92A12D829468}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DG.Heuristic", "src\DG.Heuristic.csproj", "{22629084-5748-4EC1-BE95-5F57033FED59}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F2AAD37-DD33-4C84-9CA4-92A12D829468}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2AAD37-DD33-4C84-9CA4-92A12D829468}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2AAD37-DD33-4C84-9CA4-92A12D829468}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2AAD37-DD33-4C84-9CA4-92A12D829468}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22629084-5748-4EC1-BE95-5F57033FED59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22629084-5748-4EC1-BE95-5F57033FED59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22629084-5748-4EC1-BE95-5F57033FED59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22629084-5748-4EC1-BE95-5F57033FED59}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DC3AD70-2597-419D-B643-EB72C0A231F7}
+	EndGlobalSection
+EndGlobal
