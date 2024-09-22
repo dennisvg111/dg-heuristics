@@ -31,8 +31,8 @@ namespace DG.Heuristic.Examples
                 knapsack.Clear();
                 knapsack.Add(parsedNumbers);
 
-                var solution = knapsack.PickClosest();
-                Console.WriteLine($"Found solution: [{string.Join(", ", solution)}]");
+                var solution = knapsack.PickClosest(out int sum);
+                Console.WriteLine($"Found solution: [{string.Join(", ", solution)}] = {sum}");
             } while (!string.IsNullOrEmpty(input));
 
 

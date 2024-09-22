@@ -5,6 +5,6 @@
         /// <summary>
         /// The relative weight of this item.
         /// </summary>
-        double Weight { get; }
+        int Weight { get; }
     }
 }
