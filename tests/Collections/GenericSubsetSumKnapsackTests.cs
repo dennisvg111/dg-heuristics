@@ -2,6 +2,7 @@
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace DG.Heuristic.Tests.Collections
@@ -14,21 +15,24 @@ namespace DG.Heuristic.Tests.Collections
             var knapsack = new SubsetSumKnapsack<CardWithValue>(21);
             knapsack.Add(new CardWithValue("Clubs", 4));
             knapsack.Add(new CardWithValue("Clubs", 9));
+            knapsack.Add(new CardWithValue("Hearts", 2));
             knapsack.Add(new CardWithValue("Spades", 9));
             knapsack.Add(new CardWithValue("Diamonds", 3));
-            knapsack.Add(new CardWithValue("Hearts", 2));
 
             var cards = knapsack.PickClosest(out int sum);
 
             sum.Should().Be(21);
             cards.Count.Should().Be(3);
-            cards.Should().Contain(c => c.Name == "Spades 9")
-                .And.NotContain(c => c.Name == "Clubs 4")
-                .And.NotContain(c => c.Name == "Hearts 2");
+            cards.OrderBy(c => c).Should().BeEquivalentTo(new CardWithValue[]
+            {
+                new CardWithValue("Diamonds", 3),
+                new CardWithValue("Clubs", 9),
+                new CardWithValue("Spades", 9)
+            });
         }
 
 
-        private class CardWithValue : IWeightedData, IEquatable<CardWithValue>
+        private class CardWithValue : IWeightedData, IEquatable<CardWithValue>, IComparable<CardWithValue>
         {
             private readonly string _name;
             private readonly int _value;
@@ -58,6 +62,25 @@ namespace DG.Heuristic.Tests.Collections
             public override int GetHashCode()
             {
                 return -1125283371 + EqualityComparer<string>.Default.GetHashCode(_name);
+            }
+
+            public int CompareTo(CardWithValue other)
+            {
+                if (other == null)
+                {
+                    return 0;
+                }
+                if (_value == other._value)
+                {
+                    return _name.CompareTo(other._name);
+                }
+                return _value.CompareTo(other._value);
+            }
+
+
+            public override string ToString()
+            {
+                return _name;
             }
         }
     }
