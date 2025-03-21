@@ -50,4 +50,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DG.Heuristic.Tests" />
+  </ItemGroup>
 </Project>
