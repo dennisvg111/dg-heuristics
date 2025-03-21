@@ -3,7 +3,7 @@
     <ProjectGuid>22629084-5748-4ec1-be95-5f57033fed59</ProjectGuid>
     <TargetFramework>net48</TargetFramework>
     <AssemblyTitle>DG.Heuristic</AssemblyTitle>
-    <AssemblyVersion>0.1.2</AssemblyVersion>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
     <Product>DG.Heuristic</Product>
     <Copyright>Copyright ©  2024</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -49,5 +49,8 @@
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DG.Heuristic.Tests" />
   </ItemGroup>
 </Project>
