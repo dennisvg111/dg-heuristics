@@ -13,14 +13,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-    - uses: actions/checkout@v3
+    - name: Find solution file
+      run: |
+        $solution = Get-ChildItem -Filter *.sln | Select-Object -ExpandProperty Name
+        echo "SOLUTION_FILE=$solution" >> $env:GITHUB_ENV
     - name: Restore dependencies
-      run: dotnet restore *.sln
+      run: dotnet restore ${{ env.SOLUTION_FILE }}
     - name: Build
-      run: dotnet build *.sln --no-restore
+      run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore
     - name: Test
-      run: dotnet test *.sln --no-build --verbosity normal --blame-hang-timeout 60s --blame-hang-dump-type mini
+      run: dotnet test ${{ env.SOLUTION_FILE }} --no-build --verbosity normal --blame-hang-timeout 60s --blame-hang-dump-type mini
