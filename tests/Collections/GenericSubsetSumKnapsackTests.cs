@@ -53,6 +53,21 @@ namespace DG.Heuristic.Tests.Collections
                 .And.Contain(card9);
         }
 
+        [Fact]
+        public void PickClosest_MultipleOptions_ReturnsFirstCompleteSum()
+        {
+            var card4 = new CardWithValue("Clubs", 4);
+            var card5 = new CardWithValue("Clubs", 5);
+            var card9 = new CardWithValue("Clubs", 9);
+            var knapsackA = new SubsetSumKnapsack<CardWithValue>(9);
+
+            knapsackA.Add(new CardWithValue[] { card4, card9, card5 });
+
+            knapsackA.PickClosest(out int _)
+                .Should().ContainSingle()
+                .And.Contain(card9);
+        }
+
         private class CardWithValue : IWeightedData, IEquatable<CardWithValue>, IComparable<CardWithValue>
         {
             private readonly string _name;
