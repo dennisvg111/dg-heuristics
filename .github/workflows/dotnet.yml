@@ -10,10 +10,14 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install Mono
+      run: |
+        curl -sSL https://www.mono-project.com/download/stable | bash
+      shell: bash
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
