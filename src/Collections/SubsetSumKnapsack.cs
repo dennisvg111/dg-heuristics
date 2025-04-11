@@ -80,7 +80,7 @@ namespace DG.Heuristic.Collections
         }
     }
 
-    public class SubsetSumKnapsack<TData> where TData : IWeightedData
+    public class SubsetSumKnapsack<TData> : IKnapsack<TData> where TData : IWeightedData
     {
         private readonly int _target;
         private int _lastHighest;
