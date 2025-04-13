@@ -27,6 +27,11 @@ namespace DG.Heuristic.Examples.Test.Knapsack
             {
                 _weight = weight;
             }
+
+            public override string ToString()
+            {
+                return _weight.ToString();
+            }
         }
     }
 }
