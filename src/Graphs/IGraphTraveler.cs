@@ -2,10 +2,8 @@
 
 namespace DG.Heuristic.Graphs
 {
-    public interface IGraphTraveler<TData> where TData : IPositionedData
+    public interface IGraphTraveler<TData> where TData : IGraphPoint<TData>
     {
-        void Add(TData data);
-
         List<TData> CalculateRoute(out double totalDistance);
     }
 }

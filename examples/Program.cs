@@ -8,6 +8,15 @@ namespace DG.Heuristic.Examples
     {
         static void Main(string[] args)
         {
+            var pointA = new GraphPoint(0, 0);
+            var pointB = new GraphPoint(3, 4);
+            var distance = pointA.DistanceTo(pointB);
+
+            RunKnapsackTests();
+        }
+
+        private static void RunKnapsackTests()
+        {
             var comparator = TestComparator.For(new KnapsackDataGenerator(), new KnapsackScoreCalculator());
 
             comparator.AddTest(KnapsackTestRunner.For<ShortCircuitKnapsack<KnapsackData.TestData>>());
@@ -20,6 +29,7 @@ namespace DG.Heuristic.Examples
             {
                 Console.WriteLine(result);
             }
+
         }
     }
 }
