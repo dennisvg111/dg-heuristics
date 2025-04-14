@@ -12,7 +12,7 @@ namespace DG.Heuristic.Examples.Knapsack
             _knapsackFactory = knapsackFactory;
         }
 
-        public string Name => typeof(TKnapsack).Name;
+        public string Name => typeof(TKnapsack).Name.Replace("`1", "");
         /// <summary>
         /// Runs the current algorithm for the given <paramref name="data"/>, and returns a score indicating how good this result is (higher is better).
         /// </summary>
