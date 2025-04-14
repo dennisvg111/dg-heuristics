@@ -7,19 +7,19 @@ using Xunit;
 
 namespace DG.Heuristic.Tests.Collections
 {
-    public class GenericSubsetSumKnapsackTests
+    public class CardSubsetSumKnapsackTests
     {
         [Fact]
-        public void PickClosest_Returns_Instances()
+        public void PickClosestTo_Returns_Instances()
         {
-            var knapsack = new SubsetSumKnapsack<CardWithValue>(21);
+            var knapsack = new SubsetSumKnapsack<CardWithValue>();
             knapsack.Add(new CardWithValue("Clubs", 4));
             knapsack.Add(new CardWithValue("Clubs", 9));
             knapsack.Add(new CardWithValue("Hearts", 2));
             knapsack.Add(new CardWithValue("Spades", 9));
             knapsack.Add(new CardWithValue("Diamonds", 3));
 
-            var cards = knapsack.PickClosest(out int sum);
+            var cards = knapsack.PickClosestTo(21, out int sum);
 
             sum.Should().Be(21);
             cards.Count.Should().Be(3);
@@ -32,38 +32,38 @@ namespace DG.Heuristic.Tests.Collections
         }
 
         [Fact]
-        public void PickClosest_MultipleOptions_ReturnsFirstAdded()
+        public void PickClosestTo_MultipleOptions_ReturnsFirstAdded()
         {
             var card4 = new CardWithValue("Clubs", 4);
             var card5 = new CardWithValue("Clubs", 5);
             var card9 = new CardWithValue("Clubs", 9);
-            var knapsackA = new SubsetSumKnapsack<CardWithValue>(9);
-            var knapsackB = new SubsetSumKnapsack<CardWithValue>(9);
+            var knapsackA = new SubsetSumKnapsack<CardWithValue>();
+            var knapsackB = new SubsetSumKnapsack<CardWithValue>();
 
-            knapsackA.Add(new CardWithValue[] { card4, card5, card9 });
-            knapsackB.Add(new CardWithValue[] { card9, card5, card4 });
+            knapsackA.AddRange(new CardWithValue[] { card4, card5, card9 });
+            knapsackB.AddRange(new CardWithValue[] { card9, card5, card4 });
 
-            knapsackA.PickClosest(out int _)
+            knapsackA.PickClosestTo(9, out int _)
                 .Should().HaveCount(2)
                 .And.Contain(card4)
                 .And.Contain(card5);
 
-            knapsackB.PickClosest(out int _)
+            knapsackB.PickClosestTo(9, out int _)
                 .Should().ContainSingle()
                 .And.Contain(card9);
         }
 
         [Fact]
-        public void PickClosest_MultipleOptions_ReturnsFirstCompleteSum()
+        public void PickClosestTo_MultipleOptions_ReturnsFirstCompleteSum()
         {
             var card4 = new CardWithValue("Clubs", 4);
-            var card5 = new CardWithValue("Clubs", 5);
             var card9 = new CardWithValue("Clubs", 9);
-            var knapsackA = new SubsetSumKnapsack<CardWithValue>(9);
+            var card5 = new CardWithValue("Clubs", 5);
+            var knapsackA = new SubsetSumKnapsack<CardWithValue>();
 
-            knapsackA.Add(new CardWithValue[] { card4, card9, card5 });
+            knapsackA.AddRange(new CardWithValue[] { card4, card9, card5 });
 
-            knapsackA.PickClosest(out int _)
+            knapsackA.PickClosestTo(9, out int _)
                 .Should().ContainSingle()
                 .And.Contain(card9);
         }

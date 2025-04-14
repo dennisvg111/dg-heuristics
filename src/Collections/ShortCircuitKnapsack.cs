@@ -2,30 +2,25 @@
 
 namespace DG.Heuristic.Collections
 {
-    public class ShortCircuitKnapsack<TData> : IKnapsack<TData> where TData : IWeightedData
+    public class ShortCircuitKnapsack<TData> : IKnapsack<TData>, IMutableCollection<TData> where TData : IWeightedData
     {
-        private int _target;
         private SortedList<TData, TData> _sortedData = new SortedList<TData, TData>(new InternalComparer());
 
-        public ShortCircuitKnapsack(int target)
+        /// <inheritdoc/>
+        public bool Add(TData item)
         {
-            _target = target;
+            _sortedData.Add(item, item);
+            return true;
         }
 
-        public void Add(IEnumerable<TData> data)
-        {
-            foreach (var item in data)
-            {
-                _sortedData.Add(item, item);
-            }
-        }
-
+        /// <inheritdoc/>
         public void Clear()
         {
             _sortedData.Clear();
         }
 
-        public List<TData> PickClosest(out int sum)
+        /// <inheritdoc/>
+        public List<TData> PickClosestTo(int target, out int sum)
         {
             List<TData> data = new List<TData>();
             sum = 0;
@@ -34,7 +29,7 @@ namespace DG.Heuristic.Collections
             {
                 sum += item.Value.Weight;
                 data.Add(item.Value);
-                if (sum >= _target)
+                if (sum >= target)
                 {
                     break;
                 }
@@ -43,7 +38,7 @@ namespace DG.Heuristic.Collections
             return data;
         }
 
-        public class InternalComparer : IComparer<TData>
+        private class InternalComparer : IComparer<TData>
         {
             public int Compare(TData x, TData y)
             {

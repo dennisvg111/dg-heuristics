@@ -10,8 +10,8 @@ namespace DG.Heuristic.Examples
         {
             var comparator = TestComparator.For(new KnapsackDataGenerator(), new KnapsackScoreCalculator());
 
-            comparator.AddTest(KnapsackTestRunner.For((t) => new ShortCircuitKnapsack<KnapsackData.TestData>(t)));
-            comparator.AddTest(KnapsackTestRunner.For((t) => new SubsetSumKnapsack<KnapsackData.TestData>(t)));
+            comparator.AddTest(KnapsackTestRunner.For<ShortCircuitKnapsack<KnapsackData.TestData>>());
+            comparator.AddTest(KnapsackTestRunner.For<SubsetSumKnapsack<KnapsackData.TestData>>());
 
             int testCount = 1000;
             Console.WriteLine($"Running {testCount} tests");
