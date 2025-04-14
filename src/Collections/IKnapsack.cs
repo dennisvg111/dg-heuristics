@@ -9,22 +9,11 @@ namespace DG.Heuristic.Collections
     public interface IKnapsack<TData> where TData : IWeightedData
     {
         /// <summary>
-        /// <para>Adds the values in the given <paramref name="data"/> to this knapsack.</para>
-        /// <para>Note that values with a weight of 0 or less will be ignored.</para>
+        /// Finds items that have a sum of weights closest to the <paramref name="target"/>. Returns the exact <paramref name="sum"/> of those values.
         /// </summary>
-        /// <param name="data"></param>
-        void Add(IEnumerable<TData> data);
-
-        /// <summary>
-        /// Removes all data currently in this knapsack
-        /// </summary>
-        void Clear();
-
-        /// <summary>
-        /// Finds the sum of values closest to the target. Returns the exact <paramref name="sum"/> of those values.
-        /// </summary>
-        /// <param name="sum"></param>
+        /// <param name="target">The target total weight of items to search for.</param>
+        /// <param name="sum">The sum of weights of the found items.</param>
         /// <returns></returns>
-        List<TData> PickClosest(out int sum);
+        List<TData> PickClosestTo(int target, out int sum);
     }
 }
