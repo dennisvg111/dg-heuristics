@@ -1,4 +1,4 @@
-﻿namespace DG.Heuristic.Examples.Test
+﻿namespace DG.Heuristic.Examples
 {
     public interface ITestScoreCalculator<TData, TResult>
     {

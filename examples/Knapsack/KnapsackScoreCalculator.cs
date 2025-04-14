@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DG.Heuristic.Examples.Test.Knapsack
+namespace DG.Heuristic.Examples.Knapsack
 {
     public class KnapsackScoreCalculator : ITestScoreCalculator<KnapsackData, int>
     {

@@ -1,7 +1,7 @@
 ﻿using DG.Heuristic.Collections;
 using System.Collections.Generic;
 
-namespace DG.Heuristic.Examples.Test.Knapsack
+namespace DG.Heuristic.Examples.Knapsack
 {
     public class KnapsackData
     {

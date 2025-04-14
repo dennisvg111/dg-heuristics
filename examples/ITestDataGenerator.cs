@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DG.Heuristic.Examples.Test
+namespace DG.Heuristic.Examples
 {
     public interface ITestDataGenerator<TData>
     {
