@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace DG.Heuristic.Examples.Test
+namespace DG.Heuristic.Examples
 {
     public class TestComparator<TInput, TOutput>
     {

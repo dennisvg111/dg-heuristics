@@ -1,18 +1,19 @@
 ﻿using DG.Heuristic.Collections;
 using System;
 
-namespace DG.Heuristic.Examples.Test.Knapsack
+namespace DG.Heuristic.Examples.Knapsack
 {
     public class KnapsackTestRunner<TKnapsack> : ITestRunner<KnapsackData, int> where TKnapsack : IKnapsack<KnapsackData.TestData>
     {
         private readonly Func<int, TKnapsack> _knapsackFactory;
+
+        public string Name => typeof(TKnapsack).Name.Replace("`1", "");
 
         public KnapsackTestRunner(Func<int, TKnapsack> knapsackFactory)
         {
             _knapsackFactory = knapsackFactory;
         }
 
-        public string Name => typeof(TKnapsack).Name;
         /// <summary>
         /// Runs the current algorithm for the given <paramref name="data"/>, and returns a score indicating how good this result is (higher is better).
         /// </summary>

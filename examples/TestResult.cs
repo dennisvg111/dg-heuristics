@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DG.Heuristic.Examples.Test
+namespace DG.Heuristic.Examples
 {
     public class TestResult
     {

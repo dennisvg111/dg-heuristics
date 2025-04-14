@@ -1,6 +1,5 @@
 ﻿using DG.Heuristic.Collections;
-using DG.Heuristic.Examples.Test;
-using DG.Heuristic.Examples.Test.Knapsack;
+using DG.Heuristic.Examples.Knapsack;
 using System;
 
 namespace DG.Heuristic.Examples
