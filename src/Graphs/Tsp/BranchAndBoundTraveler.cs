@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DG.Heuristic.Graphs
+namespace DG.Heuristic.Graphs.Tsp
 {
     public class BranchAndBoundTraveler<TData> : IGraphTraveler<TData>, IMutableCollection<TData> where TData : IGraphPoint<TData>
     {

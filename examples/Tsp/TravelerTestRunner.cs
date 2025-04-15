@@ -2,42 +2,50 @@
 using System;
 using System.Collections.Generic;
 
-namespace DG.Heuristic.Examples.Tsp
+namespace DG.Heuristic.Examples.Tsp;
+
+public class TravelerTestRunner<TTraveler> : ITestRunner<List<GraphPoint>, double> where TTraveler : IGraphTraveler<GraphPoint>
 {
-    public class TravelerTestRunner<TTraveler> : ITestRunner<List<GraphPoint>, double> where TTraveler : IGraphTraveler<GraphPoint>
+    private readonly Func<List<GraphPoint>, TTraveler> _travelerFactory;
+
+    public TravelerTestRunner(Func<List<GraphPoint>, TTraveler> travelerFactory)
     {
-        private readonly Func<List<GraphPoint>, TTraveler> _travelerFactory;
-
-        public TravelerTestRunner(Func<List<GraphPoint>, TTraveler> travelerFactory)
-        {
-            _travelerFactory = travelerFactory;
-        }
-
-        public string Name => typeof(TTraveler).Name.Replace("`1", "");
-
-        public double Run(List<GraphPoint> input)
-        {
-            var traveler = _travelerFactory(input);
-            traveler.CalculateRoute(out double distance);
-            return distance;
-        }
+        _travelerFactory = travelerFactory;
     }
 
-    public static class TravelerTestRunner
-    {
-        public static TravelerTestRunner<TTraveler> For<TTraveler>() where TTraveler : IGraphTraveler<GraphPoint>, IMutableCollection<GraphPoint>, new()
-        {
-            return For((data) =>
-            {
-                var traveler = new TTraveler();
-                traveler.AddRange(data);
-                return traveler;
-            });
-        }
+    public string Name => typeof(TTraveler).Name.Replace("`1", "");
 
-        public static TravelerTestRunner<TTraveler> For<TTraveler>(Func<List<GraphPoint>, TTraveler> travelerFactory) where TTraveler : IGraphTraveler<GraphPoint>
+    public double Run(List<GraphPoint> input)
+    {
+        var traveler = _travelerFactory(input);
+        var points = traveler.CalculateRoute(out double distance);
+        double actualDistance = 0;
+        for (int i = 1; i < points.Count; i++)
         {
-            return new TravelerTestRunner<TTraveler>(travelerFactory);
+            actualDistance += points[i - 1].DistanceTo(points[i]);
         }
+        if (Math.Abs(actualDistance - distance) > 0.1)
+        {
+            throw new Exception($"Distance should be {distance}, but found {actualDistance} instead.");
+        }
+        return actualDistance;
+    }
+}
+
+public static class TravelerTestRunner
+{
+    public static TravelerTestRunner<TTraveler> For<TTraveler>() where TTraveler : IGraphTraveler<GraphPoint>, IMutableCollection<GraphPoint>, new()
+    {
+        return For((data) =>
+        {
+            var traveler = new TTraveler();
+            traveler.AddRange(data);
+            return traveler;
+        });
+    }
+
+    public static TravelerTestRunner<TTraveler> For<TTraveler>(Func<List<GraphPoint>, TTraveler> travelerFactory) where TTraveler : IGraphTraveler<GraphPoint>
+    {
+        return new TravelerTestRunner<TTraveler>(travelerFactory);
     }
 }

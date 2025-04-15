@@ -1,7 +1,7 @@
 ﻿using DG.Heuristic.Collections;
 using DG.Heuristic.Examples.Knapsack;
 using DG.Heuristic.Examples.Tsp;
-using DG.Heuristic.Graphs;
+using DG.Heuristic.Graphs.Tsp;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -21,8 +21,8 @@ internal class Program
         var distance = pointA.DistanceTo(pointB);
 
         RunTravelerTests(1000, "static example points", new StaticExampleTspDataGenerator());
-        var randomTraveledPointsGenerator = TspDataGenerator.Default;
-        RunTravelerTests(25, $"randomly generated (between {randomTraveledPointsGenerator.MinPoints} and {randomTraveledPointsGenerator.MaxPoints}) points", randomTraveledPointsGenerator);
+        var randomTraveledPointsGenerator = new TspDataGenerator(100, 100);
+        RunTravelerTests(1000, $"randomly generated (between {randomTraveledPointsGenerator.MinPoints} and {randomTraveledPointsGenerator.MaxPoints}) points", randomTraveledPointsGenerator);
         RunKnapsackTests();
     }
 
@@ -33,8 +33,8 @@ internal class Program
 
         comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
         comparator.AddTest(TravelerTestRunner.For<TwoOptTraveler<GraphPoint>>());
-        comparator.AddTest(TravelerTestRunner.For<BranchAndBoundTraveler<GraphPoint>>());
-        comparator.AddTest(TravelerTestRunner.For<BruteForceTraveler<GraphPoint>>());
+        //comparator.AddTest(TravelerTestRunner.For<BranchAndBoundTraveler<GraphPoint>>());
+        //comparator.AddTest(TravelerTestRunner.For<ParallelTwoOptTraveler<GraphPoint>>());
 
         var results = comparator.RunMultiple(testCount);
         foreach (var result in results)
