@@ -24,6 +24,7 @@ namespace DG.Heuristic.Examples
         {
             var comparator = TestComparator.For(generator, TspScoreCalculator.Instance);
 
+            comparator.AddTest(TravelerTestRunner.For<BruteForceTraveler<GraphPoint>>());
             comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
 
             int testCount = 1000;
