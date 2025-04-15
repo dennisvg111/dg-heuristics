@@ -15,7 +15,7 @@ namespace DG.Heuristic.Examples
             var pointB = new GraphPoint(3, 4);
             var distance = pointA.DistanceTo(pointB);
 
-            RunTravelerTests(new WikipediaExampleTspDataGenerator());
+            RunTravelerTests(new StaticExampleTspDataGenerator());
             Console.ReadLine();
             RunKnapsackTests();
         }
@@ -27,6 +27,7 @@ namespace DG.Heuristic.Examples
             comparator.AddTest(TravelerTestRunner.For<BruteForceTraveler<GraphPoint>>());
             comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
             comparator.AddTest(TravelerTestRunner.For<TwoOptTraveler<GraphPoint>>());
+            comparator.AddTest(TravelerTestRunner.For<BranchAndBoundTraveler<GraphPoint>>());
 
             int testCount = 100;
             Console.WriteLine($"Running {testCount} tests");

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DG.Heuristic.Examples.Tsp
 {
-    public class WikipediaExampleTspDataGenerator : ITestDataGenerator<List<GraphPoint>>
+    public class StaticExampleTspDataGenerator : ITestDataGenerator<List<GraphPoint>>
     {
         private static readonly GraphPoint[] _points = new GraphPoint[]
         {
