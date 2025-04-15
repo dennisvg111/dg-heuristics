@@ -23,7 +23,4 @@
   <ItemGroup>
     <ProjectReference Include="..\src\DG.Heuristic.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tsp\" />
-  </ItemGroup>
 </Project>

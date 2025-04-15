@@ -1,6 +1,9 @@
 ﻿using DG.Heuristic.Collections;
 using DG.Heuristic.Examples.Knapsack;
+using DG.Heuristic.Examples.Tsp;
+using DG.Heuristic.Graphs;
 using System;
+using System.Collections.Generic;
 
 namespace DG.Heuristic.Examples
 {
@@ -12,7 +15,24 @@ namespace DG.Heuristic.Examples
             var pointB = new GraphPoint(3, 4);
             var distance = pointA.DistanceTo(pointB);
 
+            RunTravelerTests(new WikipediaExampleTspDataGenerator());
+            Console.ReadLine();
             RunKnapsackTests();
+        }
+
+        private static void RunTravelerTests(ITestDataGenerator<List<GraphPoint>> generator)
+        {
+            var comparator = TestComparator.For(generator, TspScoreCalculator.Instance);
+
+            comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
+
+            int testCount = 1000;
+            Console.WriteLine($"Running {testCount} tests");
+            var results = comparator.RunMultiple(testCount);
+            foreach (var result in results)
+            {
+                Console.WriteLine(result);
+            }
         }
 
         private static void RunKnapsackTests()
@@ -29,7 +49,6 @@ namespace DG.Heuristic.Examples
             {
                 Console.WriteLine(result);
             }
-
         }
     }
 }
