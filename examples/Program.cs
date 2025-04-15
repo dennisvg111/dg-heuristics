@@ -34,7 +34,7 @@ internal class Program
         comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
         comparator.AddTest(TravelerTestRunner.For<TwoOptTraveler<GraphPoint>>());
         //comparator.AddTest(TravelerTestRunner.For<BranchAndBoundTraveler<GraphPoint>>());
-        //comparator.AddTest(TravelerTestRunner.For<ParallelTwoOptTraveler<GraphPoint>>());
+        comparator.AddTest(TravelerTestRunner.For<ParallelTwoOptTraveler<GraphPoint>>());
 
         var results = comparator.RunMultiple(testCount);
         foreach (var result in results)
