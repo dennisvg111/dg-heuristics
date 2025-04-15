@@ -61,7 +61,7 @@ namespace DG.Heuristic.Graphs.Tsp
             while (improved)
             {
                 improved = false;
-                double bestDelta = 0;
+                double currentDelta = 0;
                 int bestI = -1, bestK = -1;
                 object locker = new object();
 
@@ -69,14 +69,14 @@ namespace DG.Heuristic.Graphs.Tsp
                 {
                     for (int k = i + 1; k < n; k++)
                     {
-                        double delta = CalculateDelta(route, i, k);
-                        if (delta < bestDelta)
+                        double newDelta = CalculateDelta(route, i, k);
+                        if (newDelta < currentDelta)
                         {
                             lock (locker)
                             {
-                                if (delta < bestDelta)
+                                if (newDelta < currentDelta)
                                 {
-                                    bestDelta = delta;
+                                    currentDelta = newDelta;
                                     bestI = i;
                                     bestK = k;
                                 }
@@ -85,10 +85,10 @@ namespace DG.Heuristic.Graphs.Tsp
                     }
                 });
 
-                if (bestDelta < 0)
+                if (currentDelta < 0)
                 {
                     route = TwoOptSwap(route, bestI, bestK);
-                    bestDistance += bestDelta;
+                    bestDistance += currentDelta;
                     improved = true;
                 }
             }
