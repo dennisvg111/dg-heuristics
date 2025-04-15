@@ -26,8 +26,9 @@ namespace DG.Heuristic.Examples
 
             comparator.AddTest(TravelerTestRunner.For<BruteForceTraveler<GraphPoint>>());
             comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
+            comparator.AddTest(TravelerTestRunner.For<TwoOptTraveler<GraphPoint>>());
 
-            int testCount = 1000;
+            int testCount = 100;
             Console.WriteLine($"Running {testCount} tests");
             var results = comparator.RunMultiple(testCount);
             foreach (var result in results)
