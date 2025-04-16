@@ -20,9 +20,9 @@ internal class Program
         var pointB = new GraphPoint(3, 4);
         var distance = pointA.DistanceTo(pointB);
 
-        RunTravelerTests(1000, "static example points", new StaticExampleTspDataGenerator());
-        var randomTraveledPointsGenerator = new TspDataGenerator(100, 100);
-        RunTravelerTests(1000, $"randomly generated (between {randomTraveledPointsGenerator.MinPoints} and {randomTraveledPointsGenerator.MaxPoints}) points", randomTraveledPointsGenerator);
+        RunTravelerTests(1000, $"static example points ({StaticExampleTspDataGenerator.PointCount})", new StaticExampleTspDataGenerator());
+        var randomTraveledPointsGenerator = new TspDataGenerator(100, 250);
+        RunTravelerTests(10, $"randomly generated (between {randomTraveledPointsGenerator.MinPoints} and {randomTraveledPointsGenerator.MaxPoints}) points", randomTraveledPointsGenerator);
         RunKnapsackTests();
     }
 
@@ -33,8 +33,8 @@ internal class Program
 
         comparator.AddTest(TravelerTestRunner.For<NearestNeighbourTraveler<GraphPoint>>());
         comparator.AddTest(TravelerTestRunner.For<TwoOptTraveler<GraphPoint>>());
-        //comparator.AddTest(TravelerTestRunner.For<BranchAndBoundTraveler<GraphPoint>>());
-        comparator.AddTest(TravelerTestRunner.For<ParallelTwoOptTraveler<GraphPoint>>());
+
+        comparator.AddTest(TravelerTestRunner.For<AntColonyTraveler<GraphPoint>>());
 
         var results = comparator.RunMultiple(testCount);
         foreach (var result in results)
