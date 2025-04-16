@@ -12,6 +12,30 @@
         public int AntCount { get; set; } = 30;
 
         /// <summary>
+        /// Gets or sets the number of iterations the algorithm will run before stopping.
+        /// <para>
+        /// This value sets the upper limit on the number of iterations the algorithm will perform. A higher value means the algorithm will have more time to find a better solution,
+        /// but it will also take longer to run. The early exit condition based on stagnation can shorten the actual runtime.
+        /// </para>
+        /// Example:
+        /// - <c>Iterations = 100</c>: The algorithm will run for up to 100 iterations.
+        /// - <c>Iterations = 200</c>: The algorithm will run for up to 200 iterations, potentially finding a better solution but taking longer.
+        /// </summary>
+        public int Iterations { get; set; } = 100;
+
+        /// <summary>
+        /// Gets or sets the maximum number of consecutive iterations without progress before the simulation is stopped.
+        /// <para>
+        /// This parameter allows for early termination of the algorithm if it has not found a better solution within a specified number of iterations.
+        /// If no improvement in the best distance is observed for <c>StagnationMax</c> iterations, the algorithm will terminate early, improving efficiency.
+        /// </para>
+        /// Example:
+        /// - <c>StagnationMax = 25</c>: If no improvement in the best route is found for 25 iterations, the algorithm will stop early.
+        /// - <c>StagnationMax = 50</c>: The algorithm will be more patient, allowing for 50 iterations without improvement before stopping.
+        /// </summary>
+        public int StagnationMax { get; set; } = 25;
+
+        /// <summary>
         /// Gets or sets the influence of pheromone in the decision-making process.
         /// <para>
         /// This value controls how strongly ants are influenced by pheromone levels when selecting the next point. 
@@ -62,30 +86,6 @@
         /// - <c>Q = 1.0</c>: Very small pheromone deposit, making ants more likely to explore novel solutions.
         /// </summary>
         public double Q { get; set; } = 100.0;
-
-        /// <summary>
-        /// Gets or sets the number of iterations the algorithm will run before stopping.
-        /// <para>
-        /// This value sets the upper limit on the number of iterations the algorithm will perform. A higher value means the algorithm will have more time to find a better solution,
-        /// but it will also take longer to run. The early exit condition based on stagnation can shorten the actual runtime.
-        /// </para>
-        /// Example:
-        /// - <c>Iterations = 100</c>: The algorithm will run for up to 100 iterations.
-        /// - <c>Iterations = 200</c>: The algorithm will run for up to 200 iterations, potentially finding a better solution but taking longer.
-        /// </summary>
-        public int Iterations { get; set; } = 100;
-
-        /// <summary>
-        /// Gets or sets the maximum number of consecutive iterations without progress before the simulation is stopped.
-        /// <para>
-        /// This parameter allows for early termination of the algorithm if it has not found a better solution within a specified number of iterations.
-        /// If no improvement in the best distance is observed for <c>StagnationMax</c> iterations, the algorithm will terminate early, improving efficiency.
-        /// </para>
-        /// Example:
-        /// - <c>StagnationMax = 25</c>: If no improvement in the best route is found for 25 iterations, the algorithm will stop early.
-        /// - <c>StagnationMax = 50</c>: The algorithm will be more patient, allowing for 50 iterations without improvement before stopping.
-        /// </summary>
-        public int StagnationMax { get; set; } = 25;
     }
 
 }
