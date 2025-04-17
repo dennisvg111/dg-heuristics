@@ -94,38 +94,25 @@ namespace DG.Heuristic.Graphs.Tsp
 
         private int SelectNextCity(Ant ant, out double distance)
         {
-            double sum = 0;
-            int bufferSize = 0;
+            int usedBufferSize = 0;
             var current = ant.Current;
 
-            var buffer = ant.OptionsBuffer;
-
-            foreach (int city in ant.Unvisited)
+            for (int city = 1; city <= ant.BufferSize; city++)
             {
+                if (ant.HasVisited(city))
+                {
+                    continue;
+                }
+
                 double pheromone = Math.Pow(_pheromones[current, city], Alpha);
                 var distanceToCity = _cache.CalculateDistanceBetween(current, city);
                 double visibility = Math.Pow(1.0 / (distanceToCity + 1e-6), Beta);
                 double score = pheromone * visibility;
-                buffer[bufferSize].Update(city, score, distanceToCity);
-                bufferSize++;
-                sum += score;
+                ant.UpdateBuffer(usedBufferSize, city, distanceToCity, score);
+                usedBufferSize++;
             }
 
-            double threshold = ant.NextDouble() * sum;
-            double cumulative = 0;
-            for (int j = 0; j < bufferSize; j++)
-            {
-                cumulative += buffer[j].Score;
-                if (cumulative >= threshold)
-                {
-                    distance = buffer[j].Distance;
-                    return buffer[j].City;
-                }
-            }
-
-            // Fallback
-            distance = buffer[0].Distance;
-            return buffer[0].City;
+            return ant.PickCityFromBuffer(usedBufferSize, out distance);
         }
 
         private void EvaporatePheromones()
@@ -155,8 +142,12 @@ namespace DG.Heuristic.Graphs.Tsp
 
             private readonly int _pointsCount;
             private readonly Random _random;
+            private bool[] _visited;
+            private int _unvisitedCount;
+
             private readonly CityProbability[] _optionsBuffer;
-            private readonly HashSet<int> _unvisited;
+            private readonly double[] _cumulativeScoreBuffer;
+            private double _bufferScoreSum = 0;
 
             private double _bestDistance;
             private int[] _bestRoute;
@@ -165,14 +156,11 @@ namespace DG.Heuristic.Graphs.Tsp
 
             public IReadOnlyCollection<int> BestRoute => _bestRoute;
 
-            public IReadOnlyList<CityProbability> OptionsBuffer => _optionsBuffer;
-
-            public IReadOnlyCollection<int> Unvisited => _unvisited;
-
             public int Current => _currentRoute[_currentStep - 1];
             public IReadOnlyList<int> CurrentRoute => _currentRoute;
+            public bool HasUnvisited => _unvisitedCount > 0;
 
-            public bool HasUnvisited => _unvisited.Count > 0;
+            public int BufferSize => _pointsCount - 1;
 
             public Ant(int pointsCount)
             {
@@ -182,34 +170,69 @@ namespace DG.Heuristic.Graphs.Tsp
 
                 _bestRoute = new int[_pointsCount];
                 _bestDistance = double.MaxValue;
-                _unvisited = new HashSet<int>();
+                _visited = new bool[pointsCount];
 
                 _random = new Random();
                 _optionsBuffer = new CityProbability[pointsCount - 1];
+                _cumulativeScoreBuffer = new double[pointsCount - 1];
                 for (int i = 0; i < _optionsBuffer.Length; i++)
                 {
-                    _optionsBuffer[i] = new CityProbability(0, 0, 0);
+                    _optionsBuffer[i] = CityProbability.Zero;
                 }
             }
 
-            public double NextDouble()
+            public void UpdateBuffer(int bufferIndex, int city, double distance, double score)
             {
-                return _random.NextDouble();
+                if (bufferIndex == 0)
+                {
+                    _bufferScoreSum = 0;
+                }
+                _bufferScoreSum += score;
+                _cumulativeScoreBuffer[bufferIndex] = _bufferScoreSum;
+                _optionsBuffer[bufferIndex].Update(city, distance, score);
+            }
+
+            public int PickCityFromBuffer(int usedBufferSize, out double distance)
+            {
+                var index = PickBufferIndex(usedBufferSize);
+                distance = _optionsBuffer[index].Distance;
+                return _optionsBuffer[index].City;
+            }
+
+            private int PickBufferIndex(int usedBufferSize)
+            {
+                if (usedBufferSize == 1)
+                {
+                    return 0;
+                }
+
+                double threshold = _random.NextDouble() * _bufferScoreSum;
+
+                for (int i = 0; i < usedBufferSize; i++)
+                {
+                    if (_cumulativeScoreBuffer[i] >= threshold)
+                    {
+                        return i;
+                    }
+                }
+
+                return 0;
             }
 
             public void Reset()
             {
                 _currentStep = 0;
-                for (int i = 1; i < _pointsCount; i++)
-                {
-                    _unvisited.Add(i);
-                }
+                _unvisitedCount = _pointsCount;
+                Array.Clear(_visited, 0, _visited.Length);
             }
+
+            public bool HasVisited(int i) => _visited[i];
 
             public void Visit(int i)
             {
+                _visited[i] = true;
+                _unvisitedCount--;
                 _currentRoute[_currentStep] = i;
-                _unvisited.Remove(i);
                 _currentStep++;
             }
 
@@ -231,23 +254,29 @@ namespace DG.Heuristic.Graphs.Tsp
             public double Score { get; set; }
             public double Distance { get; set; }
 
-            public CityProbability(int city, double score, double distance)
+            public void Update(int city, double distance, double score)
             {
                 City = city;
-                Score = score;
                 Distance = distance;
-            }
-
-            public void Update(int city, double score, double distance)
-            {
-                City = city;
                 Score = score;
-                Distance = distance;
             }
 
             public override string ToString()
             {
                 return $"[{City}] {Distance}, score: {Score}";
+            }
+
+            public static CityProbability Zero
+            {
+                get
+                {
+                    return new CityProbability()
+                    {
+                        City = 0,
+                        Score = 0,
+                        Distance = 0
+                    };
+                }
             }
         }
     }

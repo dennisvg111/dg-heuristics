@@ -49,7 +49,7 @@ namespace DG.Heuristic.Graphs
             return distanceMatrix;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double CalculateDistanceBetween(int indexA, int indexB)
         {
             if (!_isCached)

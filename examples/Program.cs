@@ -22,7 +22,7 @@ internal class Program
 
         RunTravelerTests(1000, $"static example points ({StaticExampleTspDataGenerator.PointCount})", new StaticExampleTspDataGenerator());
         var randomTraveledPointsGenerator = new TspDataGenerator(100);
-        RunTravelerTests(10, $"randomly generated points ({randomTraveledPointsGenerator.Count})", randomTraveledPointsGenerator);
+        RunTravelerTests(20, $"randomly generated points ({randomTraveledPointsGenerator.Count})", randomTraveledPointsGenerator);
         RunKnapsackTests();
     }
 
