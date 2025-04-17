@@ -44,8 +44,9 @@
         /// Example:
         /// - <c>Alpha = 1.0</c>: Equal influence of pheromone and distance.
         /// - <c>Alpha = 5.0</c>: Stronger emphasis on pheromone, leading to shorter exploration paths.
+        /// - <c>Alpha = 0.1</c>: Less emphasis on pheromone, leading to more exploration and potentially finding better global solutions.
         /// </summary>
-        public int Alpha { get; set; } = 1;
+        public double Alpha { get; set; } = 1.0;
 
         /// <summary>
         /// Gets or sets the influence of distance in the decision-making process.
@@ -56,8 +57,9 @@
         /// Example:
         /// - <c>Beta = 1.0</c>: Equal importance of pheromone and distance.
         /// - <c>Beta = 5.0</c>: Stronger emphasis on selecting shorter paths, making ants more greedy.
+        /// - <c>Beta = 0.1</c>: Less emphasis on distance, encouraging more exploratory behavior.
         /// </summary>
-        public int Beta { get; set; } = 5;
+        public double Beta { get; set; } = 5.0;
 
         /// <summary>
         /// Gets or sets the rate at which pheromone evaporates over time.

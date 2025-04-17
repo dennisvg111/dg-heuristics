@@ -21,8 +21,8 @@ internal class Program
         var distance = pointA.DistanceTo(pointB);
 
         RunTravelerTests(1000, $"static example points ({StaticExampleTspDataGenerator.PointCount})", new StaticExampleTspDataGenerator());
-        var randomTraveledPointsGenerator = new TspDataGenerator(100);
-        RunTravelerTests(10, $"randomly generated {randomTraveledPointsGenerator.Count} points", randomTraveledPointsGenerator);
+        var randomTraveledPointsGenerator = new TspDataGenerator(100, 250);
+        RunTravelerTests(10, $"randomly generated (between {randomTraveledPointsGenerator.MinPoints} and {randomTraveledPointsGenerator.MaxPoints}) points", randomTraveledPointsGenerator);
         RunKnapsackTests();
     }
 
