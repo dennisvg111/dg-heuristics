@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{90549F90-AFB9-411D-B330-1398F338EDDD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net8</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AssemblyTitle>DG.Heuristic.Examples</AssemblyTitle>
     <Product>DG.Heuristic.Examples</Product>
@@ -16,9 +16,7 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
+    <PackageReference Include="iluvadev.ConsoleProgressBar" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\DG.Heuristic.csproj" />

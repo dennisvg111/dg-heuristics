@@ -1,65 +1,87 @@
-﻿using System;
+﻿using iluvadev.ConsoleProgressBar;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
-namespace DG.Heuristic.Examples
+namespace DG.Heuristic.Examples;
+
+public class TestComparator<TInput, TOutput>
 {
-    public class TestComparator<TInput, TOutput>
+    private static readonly Random _random = new Random();
+    private readonly List<ITestRunner<TInput, TOutput>> _tests = new List<ITestRunner<TInput, TOutput>>();
+    private readonly Stopwatch _stopwatch = new Stopwatch();
+
+    private readonly ITestDataGenerator<TInput> _dataGenerator;
+    private readonly ITestScoreCalculator<TInput, TOutput> _scoreCalculator;
+
+    public TestComparator(ITestDataGenerator<TInput> dataGenerator, ITestScoreCalculator<TInput, TOutput> scoreCalculator)
     {
-        private static readonly Random _random = new Random();
-        private readonly List<ITestRunner<TInput, TOutput>> _tests = new List<ITestRunner<TInput, TOutput>>();
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        _dataGenerator = dataGenerator;
+        _scoreCalculator = scoreCalculator;
+    }
 
-        private readonly ITestDataGenerator<TInput> _dataGenerator;
-        private readonly ITestScoreCalculator<TInput, TOutput> _scoreCalculator;
+    public void AddTest(ITestRunner<TInput, TOutput> test)
+    {
+        _tests.Add(test);
+    }
 
-        public TestComparator(ITestDataGenerator<TInput> dataGenerator, ITestScoreCalculator<TInput, TOutput> scoreCalculator)
+    private List<TestResult> RunSingle(ProgressBar pb)
+    {
+        List<TestResult> results = new List<TestResult>();
+
+        var data = _dataGenerator.GenerateTestData(_random);
+        foreach (var runner in _tests)
         {
-            _dataGenerator = dataGenerator;
-            _scoreCalculator = scoreCalculator;
+            string runnerName = runner.Name;
+            pb.ElementName = runner.Name;
+            _stopwatch.Restart();
+            var result = runner.Run(data);
+            _stopwatch.Stop();
+            pb.PerformStep();
+            results.Add(new TestResult(runnerName, _stopwatch.Elapsed, _scoreCalculator.CalculateTestScore(data, result)));
         }
+        return results;
+    }
 
-        public void AddTest(ITestRunner<TInput, TOutput> test)
+    public List<TestResult> RunMultiple(int count)
+    {
+        var resultsList = _tests.Select(t => new TestResult(t.Name)).ToList();
+        using (var pb = CreateProgressBar(count))
         {
-            _tests.Add(test);
-        }
-
-        public List<TestResult> RunSingle()
-        {
-            List<TestResult> results = new List<TestResult>();
-
-            var data = _dataGenerator.GenerateTestData(_random);
-            foreach (var runner in _tests)
-            {
-                _stopwatch.Restart();
-                var result = runner.Run(data);
-                _stopwatch.Stop();
-                results.Add(new TestResult(runner.Name, _stopwatch.Elapsed, _scoreCalculator.CalculateTestScore(data, result)));
-            }
-            return results;
-        }
-
-        public List<TestResult> RunMultiple(int count)
-        {
-            var resultsList = _tests.Select(t => new TestResult(t.Name)).ToList();
             for (int i = 0; i < count; i++)
             {
-                var results = RunSingle();
+                var results = RunSingle(pb);
                 for (int runnerI = 0; runnerI < results.Count; runnerI++)
                 {
                     resultsList[runnerI].Combine(results[runnerI]);
                 }
             }
-            return resultsList;
         }
+        return resultsList;
     }
 
-    public static class TestComparator
+    private ProgressBar CreateProgressBar(int runCount)
     {
-        public static TestComparator<TInput, TOutput> For<TInput, TOutput>(ITestDataGenerator<TInput> generator, ITestScoreCalculator<TInput, TOutput> calculator)
+        var pb = new ProgressBar()
         {
-            return new TestComparator<TInput, TOutput>(generator, calculator);
-        }
+            Maximum = runCount * _tests.Count
+        };
+        pb.Layout.Body.Pending.SetValue('─');
+        pb.Layout.Marquee.OverPending.SetValue('─');
+        pb.Text.Description.Clear();
+        pb.Text.Description.Processing.AddNew().SetValue(pb => $"Testing: {pb.ElementName}");
+        pb.Text.Description.Done.AddNew().SetValue(pb => $"{pb.Value} tests in {pb.TimeProcessing.TotalSeconds}s.");
+        Thread.Sleep(100);
+        return pb;
+    }
+}
+
+public static class TestComparator
+{
+    public static TestComparator<TInput, TOutput> For<TInput, TOutput>(ITestDataGenerator<TInput> generator, ITestScoreCalculator<TInput, TOutput> calculator)
+    {
+        return new TestComparator<TInput, TOutput>(generator, calculator);
     }
 }
