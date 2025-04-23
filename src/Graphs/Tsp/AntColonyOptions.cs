@@ -86,6 +86,20 @@
         /// - <c>Q = 1.0</c>: Very small pheromone deposit, making ants more likely to explore novel solutions.
         /// </summary>
         public double Q { get; set; } = 100.0;
+
+        /// <summary>
+        /// Returns a new instance of <see cref="AntColonyOptions"/> with default values.
+        /// </summary>
+        public static AntColonyOptions Default => new AntColonyOptions()
+        {
+            AntCount = 30,
+            Iterations = 100,
+            StagnationMax = 25,
+            Alpha = 1,
+            Beta = 5,
+            Q = 100,
+            EvaporationRate = 0.5
+        };
     }
 
 }

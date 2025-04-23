@@ -7,24 +7,24 @@ namespace DG.Heuristic.Graphs.Tsp
 {
     public class AntColonyTraveler<TData> : IGraphTraveler<TData>, IMutableCollection<TData> where TData : IGraphPoint<TData>
     {
-        private const int AntCount = 30;
-        private const double Alpha = 1.0; // Influence of pheromone
-        private const double Beta = 5.0; // Influence of distance
-        private const double EvaporationRate = 0.5;
-        private const double Q = 100.0; // Constant used to deposit pheromones
-        private const int Iterations = 100;
-        private const int StagnationMax = 25;
+        private readonly AntColonyOptions _options;
 
         private readonly List<TData> _points = new List<TData>();
         private CachedDistanceMatrix<TData> _cache;
 
         private double[,] _pheromones;
 
-        public AntColonyTraveler()
+        public AntColonyTraveler(AntColonyOptions options)
         {
             _cache = new CachedDistanceMatrix<TData>(_points);
+            _options = options;
         }
 
+        public AntColonyTraveler() : this(AntColonyOptions.Default)
+        {
+        }
+
+        /// <inheritdoc/>
         public bool Add(TData item)
         {
             _points.Add(item);
@@ -32,12 +32,14 @@ namespace DG.Heuristic.Graphs.Tsp
             return true;
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             _points.Clear();
             _cache.SetPoints(_points);
         }
 
+        /// <inheritdoc/>
         public List<TData> CalculateRoute(out double totalDistance)
         {
             int n = _points.Count;
@@ -46,11 +48,11 @@ namespace DG.Heuristic.Graphs.Tsp
                 for (int j = 0; j < n; j++)
                     _pheromones[i, j] = 1.0;
 
-            var ants = Enumerable.Range(0, AntCount).Select(i => new Ant(n)).ToArray();
+            var ants = Enumerable.Range(0, _options.AntCount).Select(i => new Ant(n)).ToArray();
             totalDistance = double.MaxValue;
             int stagnationCount = 0;
 
-            for (int iteration = 0; iteration < Iterations; iteration++)
+            for (int iteration = 0; iteration < _options.Iterations; iteration++)
             {
                 Parallel.ForEach(ants, ant =>
                 {
@@ -64,7 +66,7 @@ namespace DG.Heuristic.Graphs.Tsp
                 var foundDistance = ants.Min(a => a.BestDistance);
                 stagnationCount = foundDistance < totalDistance ? 0 : (stagnationCount + 1);
                 totalDistance = foundDistance;
-                if (stagnationCount > StagnationMax)
+                if (stagnationCount > _options.StagnationMax)
                 {
                     break;
                 }
@@ -104,9 +106,9 @@ namespace DG.Heuristic.Graphs.Tsp
                     continue;
                 }
 
-                double pheromone = Math.Pow(_pheromones[current, city], Alpha);
+                double pheromone = Math.Pow(_pheromones[current, city], _options.Alpha);
                 var distanceToCity = _cache.CalculateDistanceBetween(current, city);
-                double visibility = Math.Pow(1.0 / (distanceToCity + 1e-6), Beta);
+                double visibility = Math.Pow(1.0 / (distanceToCity + 1e-6), _options.Beta);
                 double score = pheromone * visibility;
                 ant.UpdateBuffer(usedBufferSize, city, distanceToCity, score);
                 usedBufferSize++;
@@ -120,12 +122,12 @@ namespace DG.Heuristic.Graphs.Tsp
             int n = _points.Count;
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
-                    _pheromones[i, j] *= (1.0 - EvaporationRate);
+                    _pheromones[i, j] *= (1.0 - _options.EvaporationRate);
         }
 
         private void DepositPheromones(IReadOnlyList<int> route, double distance)
         {
-            double deposit = Q / distance;
+            double deposit = _options.Q / distance;
             for (int i = 0; i < route.Count - 1; i++)
             {
                 int from = route[i];
@@ -145,7 +147,7 @@ namespace DG.Heuristic.Graphs.Tsp
             private bool[] _visited;
             private int _unvisitedCount;
 
-            private readonly CityProbability[] _optionsBuffer;
+            private readonly PointProbability[] _optionsBuffer;
             private readonly double[] _cumulativeScoreBuffer;
             private double _bufferScoreSum = 0;
 
@@ -173,11 +175,11 @@ namespace DG.Heuristic.Graphs.Tsp
                 _visited = new bool[pointsCount];
 
                 _random = new Random();
-                _optionsBuffer = new CityProbability[pointsCount - 1];
+                _optionsBuffer = new PointProbability[pointsCount - 1];
                 _cumulativeScoreBuffer = new double[pointsCount - 1];
                 for (int i = 0; i < _optionsBuffer.Length; i++)
                 {
-                    _optionsBuffer[i] = CityProbability.Zero;
+                    _optionsBuffer[i] = PointProbability.Zero;
                 }
             }
 
@@ -196,7 +198,7 @@ namespace DG.Heuristic.Graphs.Tsp
             {
                 var index = PickBufferIndex(usedBufferSize);
                 distance = _optionsBuffer[index].Distance;
-                return _optionsBuffer[index].City;
+                return _optionsBuffer[index].Index;
             }
 
             private int PickBufferIndex(int usedBufferSize)
@@ -245,38 +247,6 @@ namespace DG.Heuristic.Graphs.Tsp
                 _bestDistance = distance;
                 Array.Copy(_currentRoute, _bestRoute, _pointsCount);
                 return true;
-            }
-        }
-
-        private class CityProbability
-        {
-            public int City { get; set; }
-            public double Score { get; set; }
-            public double Distance { get; set; }
-
-            public void Update(int city, double distance, double score)
-            {
-                City = city;
-                Distance = distance;
-                Score = score;
-            }
-
-            public override string ToString()
-            {
-                return $"[{City}] {Distance}, score: {Score}";
-            }
-
-            public static CityProbability Zero
-            {
-                get
-                {
-                    return new CityProbability()
-                    {
-                        City = 0,
-                        Score = 0,
-                        Distance = 0
-                    };
-                }
             }
         }
     }
